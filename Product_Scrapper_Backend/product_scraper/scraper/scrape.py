@@ -1,10 +1,11 @@
 import json
 from Product_Scrapper_Backend.product_scraper.scraper.Products.amazon import scrape_amazon
 from Product_Scrapper_Backend.product_scraper.scraper.Products.flipkart import scrape_flipkart
+import asyncio
 if __name__ == "__main__":
     search_query = input("Enter product name to search: ")
-    amazon_results = scrape_amazon(search_query)
-    flipkart_results = scrape_flipkart(search_query)
+    amazon_results = asyncio.run((scrape_amazon(search_query)))
+    flipkart_results = asyncio.run(scrape_flipkart(search_query))
 
     # print(meesho_results)
 
