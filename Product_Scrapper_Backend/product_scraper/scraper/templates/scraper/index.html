@@ -14,18 +14,36 @@
     {% if amazon_results %}
         <h2>Amazon Results</h2>
         <ul>
-        {% for product in amazon_results %}
-            <li><a href="{{ product.link }}">{{ product.title }}</a> - {{ product.price }}</li>
-        {% endfor %}
+            {% for product in amazon_results %}
+                <li><a href="{{ product.link }}">{{ product.title }}</a> - {{ product.price }}</li>
+            {% endfor %}
         </ul>
     {% endif %}
 
     {% if flipkart_results %}
         <h2>Flipkart Results</h2>
         <ul>
-        {% for product in flipkart_results %}
-            <li><a href="{{ product.link }}">{{ product.title }}</a> - {{ product.price }}</li>
-        {% endfor %}
+            {% for product in flipkart_results %}
+                <li><a href="{{ product.link }}">{{ product.title }}</a> - {{ product.price }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if ajio_results %}
+        <h2>Ajio Results</h2>
+        <ul>
+            {% for product in ajio_results %}
+                <li><a href="{{ product.link }}">{{ product.title }}</a> - {{ product.price }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if myntra_results %}
+        <h2>Myntra Results</h2>
+        <ul>
+            {% for product in myntra_results %}
+                <li><a href="{{ product.link }}">{{ product.title }}</a> - {{ product.price }}</li>
+            {% endfor %}
         </ul>
     {% endif %}
 </body>
