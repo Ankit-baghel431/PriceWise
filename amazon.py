@@ -1,25 +1,33 @@
-import asyncio
-from playwright.async_api import async_playwright
+import requests
 from bs4 import BeautifulSoup
 import json
+import os
 
-async def scrape_amazon(search_query):
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def scrape_amazon_with_zenrows(search_query, api_key):
     search_url = f"https://www.amazon.in/s?k={search_query.replace(' ', '+')}"
+
+    params = {
+        "apikey": api_key,
+        "url": search_url,
+        "js_render": "true",  # Enables JS rendering
+        "premium_proxy": "true",  # Reduces risk of blocks
+    }
+
+    response = requests.get("https://api.zenrows.com/v1/", params=params)
+
+    if response.status_code != 200:
+        print("Error:", response.status_code, response.text)
+        return []
+
+    soup = BeautifulSoup(response.text, "html.parser")
     products = []
 
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-        )
-        page = await context.new_page()
-        await page.goto(search_url, timeout=60000)
-        await page.wait_for_selector("div[data-component-type='s-search-result']")
-
-        content = await page.content()
-        soup = BeautifulSoup(content, "html.parser")
-
-        for item in soup.find_all("div", {"data-component-type": "s-search-result"}):
+    for item in soup.find_all("div", {"data-component-type": "s-search-result"}):
+        try:
             title_element = item.find("h2")
             link_element = item.find("a", {"class": "a-link-normal"})
             img_element = item.find("img", {"class": "s-image"})
@@ -42,7 +50,7 @@ async def scrape_amazon(search_query):
                         price_float = float(price)
                         mrp_float = float(mrp)
                         discount_percentage = f"{round(((mrp_float - price_float) / mrp_float) * 100)}% off"
-                    except ValueError:
+                    except:
                         discount_percentage = "N/A"
                 else:
                     discount_percentage = "N/A"
@@ -65,19 +73,23 @@ async def scrape_amazon(search_query):
                     "tag": tag,
                     "delivery": delivery,
                 })
+        except Exception as e:
+            print("Error parsing a product:", e)
+            continue
 
-        await browser.close()
     return products
 
-# Run the async function
+# Example usage
 if __name__ == "__main__":
+    api_key = os.getenv("API_KEY")
     query = "laptop"
-    results = asyncio.run(scrape_amazon(query))
+
+    results = scrape_amazon_with_zenrows(query, api_key)
     print(json.dumps(results, indent=4))
 
     if results:
-        with open("amazon_products_playwright.json", "w") as f:
+        with open("amazon_products_zenrows.json", "w") as f:
             json.dump(results, f, indent=4)
-        print("Products saved to 'amazon_products_playwright.json'.")
+        print("Products saved to 'amazon_products_zenrows.json'.")
     else:
-        print("No products found or Amazon blocked the request.")
+        print("No products found or request failed.")
