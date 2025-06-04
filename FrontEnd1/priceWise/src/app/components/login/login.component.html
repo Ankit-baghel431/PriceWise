@@ -1,0 +1,52 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h1 class="form-title">Welcome Back</h1>
+    
+    <!-- Success message (if coming from registration) -->
+    <div *ngIf="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+    
+    <div class="input-group">
+      <label for="email">Email Address</label>
+      <input 
+        id="email" 
+        type="email" 
+        formControlName="email" 
+        placeholder="Enter your email"
+        autocomplete="email"
+      />
+      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
+        <span *ngIf="loginForm.get('email')?.errors?.['required']">Email address is required</span>
+        <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email address</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input 
+        id="password" 
+        type="password" 
+        formControlName="password" 
+        placeholder="Enter your password"
+        autocomplete="current-password"
+      />
+      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+        <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+        <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="error">{{ error }}</div>
+    
+    <button type="submit" [disabled]="isSubmitting || !loginForm.valid">
+      <span *ngIf="isSubmitting" class="loading-spinner"></span>
+      {{ isSubmitting ? 'Signing In...' : 'Sign In' }}
+    </button>
+
+    <div class="register-link">
+      <span>Don't have an account?</span>
+      <a routerLink="/register">Create one here</a>
+    </div>
+  </form>
+</div>
