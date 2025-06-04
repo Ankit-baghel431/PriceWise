@@ -1,23 +1,28 @@
-<h2>Search Product</h2>
+<!-- Carousel Section -->
+<div class="carasoul">
+  <app-carasoul></app-carasoul>
+</div>
 
-<input [(ngModel)]="searchText" placeholder="Enter search text" />
-<button (click)="fetchData()">Search</button>
+<!-- Search Section -->
+<div class="search-section">
+  <h2><strong>Find the Best Deals Across the Web</strong></h2>
 
-<!-- Loading indicator -->
-<p *ngIf="loading">Loading results...</p>
+  <input [(ngModel)]="searchText" placeholder="Enter Product Name" />
+  <button (click)="fetchData()">Search</button>
 
-<!-- Error message -->
-<p *ngIf="error" class="error-text">{{ error }}</p>
+  <!-- Loading indicator -->
+  <p *ngIf="loading">Loading results...</p>
+
+  <!-- Error message -->
+  <p *ngIf="error" class="error-text">{{ error }}</p>
+</div>
 
 <!-- Show results grouped by source -->
 <div
-  *ngIf="
-    !loading && resultsBySource && objectKeys(resultsBySource).length > 0;
-    else noResults
-  "
+  *ngIf="!loading && resultsBySource && objectKeys(resultsBySource).length > 0;"
 >
   <div *ngFor="let source of objectKeys(resultsBySource)">
-    <h3>{{ source }} Results</h3>
+    <h3 style="margin-left: 20px;">{{ source }} Results</h3>
     <ul class="product-grid">
       <li *ngFor="let product of resultsBySource[source]" class="product-card">
         <img
@@ -31,21 +36,16 @@
           rel="noopener noreferrer"
           class="product-link"
         >
-          {{ product.title || "No Title" }}
+          {{ product.title || 'No Title' }}
         </a>
         <p class="product-price">
           Price: <strong>₹{{ product.price }}</strong>
         </p>
         <p class="product-rating">
-          Rating: <strong>{{ product.rating || "N/A" }}</strong> ⭐
+          Rating: <strong>{{ product.rating || 'N/A' }}</strong> ⭐
         </p>
         <p class="product-seller">Seller: {{ product.seller || source }}</p>
       </li>
     </ul>
   </div>
 </div>
-
-<!-- No results message -->
-<ng-template #noResults>
-  <p *ngIf="!loading">No results found.</p>
-</ng-template>

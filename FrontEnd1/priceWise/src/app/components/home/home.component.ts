@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ProductServiceService } from '../../service/product-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CarasoulComponent } from '../carasoul/carasoul.component';
 
 interface Product {
   title: string;
@@ -16,7 +17,7 @@ interface Product {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule,CarasoulComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -27,7 +28,7 @@ export class HomeComponent implements OnInit {
   loading = false;
   error = '';
 
-  objectKeys = Object.keys; // to use Object.keys in template
+  objectKeys = Object.keys;
 
   fetchData() {
     if (!this.searchText.trim()) {
