@@ -1,0 +1,51 @@
+<h2>Search Product</h2>
+
+<input [(ngModel)]="searchText" placeholder="Enter search text" />
+<button (click)="fetchData()">Search</button>
+
+<!-- Loading indicator -->
+<p *ngIf="loading">Loading results...</p>
+
+<!-- Error message -->
+<p *ngIf="error" class="error-text">{{ error }}</p>
+
+<!-- Show results grouped by source -->
+<div
+  *ngIf="
+    !loading && resultsBySource && objectKeys(resultsBySource).length > 0;
+    else noResults
+  "
+>
+  <div *ngFor="let source of objectKeys(resultsBySource)">
+    <h3>{{ source }} Results</h3>
+    <ul class="product-grid">
+      <li *ngFor="let product of resultsBySource[source]" class="product-card">
+        <img
+          [src]="product.image"
+          alt="{{ product.title }}"
+          class="product-image"
+        />
+        <a
+          [href]="product.link"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="product-link"
+        >
+          {{ product.title || "No Title" }}
+        </a>
+        <p class="product-price">
+          Price: <strong>₹{{ product.price }}</strong>
+        </p>
+        <p class="product-rating">
+          Rating: <strong>{{ product.rating || "N/A" }}</strong> ⭐
+        </p>
+        <p class="product-seller">Seller: {{ product.seller || source }}</p>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- No results message -->
+<ng-template #noResults>
+  <p *ngIf="!loading">No results found.</p>
+</ng-template>
