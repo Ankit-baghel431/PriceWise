@@ -7,9 +7,12 @@ Django==5.2
 django-cors-headers==4.7.0
 djangorestframework==3.16.0
 fake-useragent==2.1.0
+greenlet==3.2.2
 gunicorn==23.0.0
 idna==3.10
 packaging==24.2
+playwright==1.52.0
+pyee==13.0.0
 requests==2.32.3
 soupsieve==2.6
 sqlparse==0.5.3
@@ -17,3 +20,5 @@ typing_extensions==4.13.2
 tzdata==2025.2
 urllib3==2.4.0
 waitress==3.0.2
+zenrows==1.4.0
+python-dotenv==1.1.0
