@@ -1,0 +1,107 @@
+<div class="register-container">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <h1 class="form-title">Create Account</h1>
+    
+    <div class="input-group">
+      <label for="username">Username</label>
+      <input 
+        id="username" 
+        type="text" 
+        formControlName="username" 
+        placeholder="Enter your username"
+        autocomplete="username"
+      />
+      <div *ngIf="hasError('username')" class="error">
+        {{ getErrorMessage('username') }}
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="name">Full Name</label>
+      <input 
+        id="name" 
+        type="text" 
+        formControlName="name" 
+        placeholder="Enter your full name"
+        autocomplete="name"
+      />
+      <div *ngIf="hasError('name')" class="error">
+        {{ getErrorMessage('name') }}
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="email">Email Address</label>
+      <input 
+        id="email" 
+        type="email" 
+        formControlName="email" 
+        placeholder="Enter your email"
+        autocomplete="email"
+      />
+      <div *ngIf="hasError('email')" class="error">
+        {{ getErrorMessage('email') }}
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input 
+        id="password" 
+        type="password" 
+        formControlName="password" 
+        placeholder="Create a secure password"
+        autocomplete="new-password"
+      />
+      <div *ngIf="hasError('password')" class="error">
+        {{ getErrorMessage('password') }}
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="password2">Confirm Password</label>
+      <input 
+        id="password2" 
+        type="password" 
+        formControlName="password2" 
+        placeholder="Confirm your password"
+        autocomplete="new-password"
+      />
+      <div *ngIf="hasError('password2')" class="error">
+        {{ getErrorMessage('password2') }}
+      </div>
+      <div *ngIf="passwordMismatchError" class="error">
+        {{ passwordMismatchError }}
+      </div>
+    </div>
+
+    <div class="checkbox-container">
+      <div class="checkbox-wrapper">
+        <input 
+          type="checkbox" 
+          id="terms_conditions"
+          formControlName="terms_conditions"
+        />
+      </div>
+      <label for="terms_conditions" class="checkbox-label">
+        I agree to the <a href="/terms" target="_blank">Terms of Service</a> and 
+        <a href="/privacy" target="_blank">Privacy Policy</a>
+      </label>
+    </div>
+    <div *ngIf="hasError('terms_conditions')" class="error">
+      {{ getErrorMessage('terms_conditions') }}
+    </div>
+
+    <div *ngIf="error" class="error">{{ error }}</div>
+    
+    <button type="submit" [disabled]="isSubmitting || !registerForm.valid">
+      <span *ngIf="isSubmitting" class="loading-spinner"></span>
+      {{ isSubmitting ? 'Creating Account...' : 'Create Account' }}
+    </button>
+    <div class="login-link">
+      <span>Already have an account?</span>
+      <a routerLink="/login">Sign in here</a>
+    </div>
+  </form>
+
+</div>
