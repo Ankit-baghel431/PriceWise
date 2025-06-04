@@ -1,0 +1,41 @@
+<header class="navbar">
+  <div class="container">
+    <div class="nav-wrapper">
+      <!-- Left Section -->
+      <div class="left">
+        <a routerLink="/" class="brand">PriceWise</a>
+        <nav class="nav-links">
+          <a routerLink="/" routerLinkActive="active">Home</a>
+          <a routerLink="/categories" routerLinkActive="active">Categories</a>
+          <a routerLink="/trending" routerLinkActive="active">Trending</a>
+          <a routerLink="/deals" routerLinkActive="active">Today's Deals</a>
+        </nav>
+      </div>
+
+      <!-- Right Section -->
+      <div class="right">
+        <button class="icon-btn" title="User">
+          <span class="material-icons">person</span>
+        </button>
+
+        <button class="icon-btn" title="Cart">
+          <span class="material-icons">shopping_cart</span>
+        </button>
+
+        <!-- Mobile Dropdown -->
+        <div class="dropdown-toggle md-hidden">
+          <button class="icon-btn" (click)="toggleDropdown()" title="Menu">
+            <span class="material-icons">menu</span>
+          </button>
+
+          <ul class="dropdown-menu" *ngIf="isDropdownOpen">
+            <li><a routerLink="/" (click)="toggleDropdown()">Home</a></li>
+            <li><a routerLink="/categories" (click)="toggleDropdown()">Categories</a></li>
+            <li><a routerLink="/trending" (click)="toggleDropdown()">Trending</a></li>
+            <li><a routerLink="/deals" (click)="toggleDropdown()">Today's Deals</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

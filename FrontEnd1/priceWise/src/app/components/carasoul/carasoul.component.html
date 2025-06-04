@@ -1,0 +1,33 @@
+<div class="carousel-container">
+  <div
+    class="carousel-wrapper"
+    [style.transform]="'translateX(-' + currentSlide * 100 + '%)'"
+  >
+    <div
+      *ngFor="let item of carouselItems"
+      class="carousel-slide"
+      [style.backgroundColor]="item.color"
+    >
+      <div class="carousel-text">
+        <h2>{{ item.title }}</h2>
+        <p>{{ item.description }}</p>
+        <button class="carousel-btn">Shop Now</button>
+      </div>
+      <div class="carousel-image">
+        <img [src]="item.image" [alt]="item.title" />
+      </div>
+    </div>
+  </div>
+
+  <button class="nav left" (click)="prevSlide()">&#8249;</button>
+  <button class="nav right" (click)="nextSlide()">&#8250;</button>
+
+  <div class="dots">
+    <span
+      *ngFor="let item of carouselItems; index as i"
+      class="dot"
+      [class.active]="i === currentSlide"
+      (click)="goToSlide(i)"
+    ></span>
+  </div>
+</div>
