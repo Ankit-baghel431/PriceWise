@@ -1,36 +1,55 @@
-import asyncio
-from playwright.async_api import async_playwright
+import requests
 from bs4 import BeautifulSoup
+import os
+from dotenv import load_dotenv
 
-async def scrape_flipkart(search_query):
-    search_url = f"https://www.flipkart.com/search?q={search_query.replace(' ', '%20')}"
+load_dotenv()
+
+def search_flipkart(query):
+    api_key = os.getenv("API_KEY")
+    url = f"https://www.flipkart.com/search?q={query.replace(' ', '%20')}"
+
+    params = {
+        "apikey": api_key,
+        "url": url,
+        "js_render": "true",
+        "premium_proxy": "true"
+    }
+
+    response = requests.get("https://api.zenrows.com/v1/", params=params)
+
+    if response.status_code != 200:
+        print("Flipkart request failed:", response.status_code, response.text)
+        return []
+
+    soup = BeautifulSoup(response.text, "html.parser")
     products = []
 
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        context = await browser.new_context(user_agent="Mozilla/5.0 ...")
-        page = await context.new_page()
-        await page.goto(search_url, timeout=60000)
-        await page.wait_for_selector("div._75nlfW", timeout=15000)
-
-        content = await page.content()
-        soup = BeautifulSoup(content, "html.parser")
-
-        for item in soup.find_all("div", class_="_75nlfW"):
-            link_tag = item.find("a", class_="CGtC98")
+    for item in soup.find_all("div", class_="_75nlfW"):
+        try:
             name_tag = item.find("div", class_="KzDlHZ")
             price_tag = item.find("div", class_="Nx9bqj _4b5DiR")
             image_tag = item.find("img", class_="DByuf4")
+            link_tag = item.find("a", class_="CGtC98")
 
-            if link_tag and name_tag and price_tag and image_tag:
-                product = {
-                    "title": name_tag.text.strip(),
-                    "price": price_tag.text.strip(),
-                    "image": image_tag["src"],
-                    "seller": "Flipkart",
-                    "link": "https://www.flipkart.com" + link_tag["href"],
-                }
-                products.append(product)
+            if name_tag and price_tag and image_tag and link_tag:
+                title = name_tag.text.strip()
+                price_text = price_tag.text.strip().replace("₹", "").replace(",", "")
+                price = float(price_text) if price_text.replace('.', '', 1).isdigit() else None
+                image = image_tag["src"]
+                link = "https://www.flipkart.com" + link_tag["href"]
 
-        await browser.close()
+                if title and price:
+                    products.append({
+                        "title": title,
+                        "price": price,
+                        "rating": 0.0,  # Rating not scraped here
+                        "image": image,
+                        "link": link,
+                        "seller": "Flipkart"
+                    })
+        except Exception as e:
+            print("Flipkart parse error:", e)
+            continue
+
     return products

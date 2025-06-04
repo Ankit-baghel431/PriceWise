@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: product-scraper
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    branch: main
+    autoDeploy: true
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: product_scraper.settings
+      - key: PYTHONUNBUFFERED
+        value: "1"
